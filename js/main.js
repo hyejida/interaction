@@ -66,7 +66,7 @@
                 break;
             }
         }
-        document.body.setAttribute('id', `show-secene-${currentScene}`)
+        document.body.setAttribute('id', `show-scene-${currentScene}`)
     }
 
 
@@ -80,12 +80,12 @@
                                             // scene에 currentScene에 해당하는애
         if (yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
             currentScene++;
-            document.body.setAttribute('id', `show-secene-${currentScene}`)
+            document.body.setAttribute('id', `show-scene-${currentScene}`)
         }
         if (yOffset < prevScrollHeight) {
             if (currentScene===0) return; // For the mobile screen
             currentScene--;
-            document.body.setAttribute('id', `show-secene-${currentScene}`) 
+            document.body.setAttribute('id', `show-scene-${currentScene}`) 
         }
 
         
