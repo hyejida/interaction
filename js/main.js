@@ -3,6 +3,7 @@
     let yOffset = 0; //instead of window.pageYoffset 
     let prevScrollHeight = 0; //previous height that is about to start the new section
     let currentScene = 0; // the height of the current active scene (0-4)
+    let enterNewScene = false; // the moment of starting the new scene
 
     //scene = html section
     const sceneInfo = [
@@ -13,7 +14,17 @@
             heightNum: 5, // Set the scrollHeight like browser height * 5
             scrollHeight: 0,
             objs: {
-                container: document.querySelector('#scroll-section-0')
+                container: document.querySelector('#scroll-section-0'),
+                messageA: document.querySelector('#scroll-section-0 .main-message.a'),
+                messageB: document.querySelector('#scroll-section-0 .main-message.b'),
+                messageC: document.querySelector('#scroll-section-0 .main-message.c'),
+                messageD: document.querySelector('#scroll-section-0 .main-message.d')
+            },
+            values: {
+                // Change CSS styles
+                messageA_opacity: [0 ,1] //[startValue, lastValue]
+
+
             }
         }, 
 
@@ -69,27 +80,65 @@
         document.body.setAttribute('id', `show-scene-${currentScene}`)
     }
 
+     
+    function calcValues(values, currentYOffset) {
+        let rv;
+        // 현재 씬에서 스크롤된 범위 비율
+        let scrollRatio = currentYOffset / sceneInfo[currentScene].scrollHeight;
 
-   
+        rv = scrollRatio * (values[1] - values[0]) + values[0];
+
+        return rv;
+
+    }
+
+
+    function playAnimation() {
+        const objs = sceneInfo[currentScene].objs;
+        const values = sceneInfo[currentScene].values;
+        const currentYOffset = yOffset - prevScrollHeight;
+
+        switch (currentScene) {
+            case 0:
+                let messageA_opacity_in = calcValues(values.messageA_opacity, currentYOffset);
+                objs.messageA.style.opacity = messageA_opacity_in;
+                console.log(messageA_opacity_in);             
+                break;
+                
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;         
+        }
+    }
+
+
 
     function scrollLoop() {
+        enterNewScene = false;
         prevScrollHeight = 0;
         for (let i = 0; i < currentScene; i++) {
             prevScrollHeight += sceneInfo[i].scrollHeight;
         }
                                             // scene에 currentScene에 해당하는애
         if (yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
+            enterNewScene = true;
             currentScene++;
             document.body.setAttribute('id', `show-scene-${currentScene}`)
         }
         if (yOffset < prevScrollHeight) {
+            enterNewScene = true;
             if (currentScene===0) return; // For the mobile screen
             currentScene--;
             document.body.setAttribute('id', `show-scene-${currentScene}`) 
         }
 
-        
-     
+        if(enterNewScene) return;
+
+        playAnimation();
     }
 
    
